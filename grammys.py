@@ -1,3 +1,4 @@
+from operator import index
 import requests, json
 from xml.sax import parseString
 from bs4 import BeautifulSoup
@@ -29,7 +30,7 @@ def get_links():
        
        index +=1
        tup = (song,artist,year[-4:])
-       print(tup)
+   return tup
  
 # Creating database
 def createDatabase(db_name):
@@ -39,37 +40,47 @@ def createDatabase(db_name):
    return cur, conn
  
 #create table for artist and artistid
-def create_artist_table(artists_lst):
+def create_artist_table(data):
    cur, conn = createDatabase('artists.db')
    cur.execute("CREATE TABLE IF NOT EXISTS artists (artistid INTEGER UNIQUE PRIMARY KEY, artistname STRING)")
-
-   cur.execute("INSERT OR IGNOR INTO artists")
-   conn.commit()
-
-#cur, conn = createDatabase('artists')  
-create_artist_table()
- 
- 
-#gets a list of artists only once 
-
-def insert_artistsdata(data):
+   
    artist_lst = []
    for result in data:
       if result[1] in artist_lst:
          continue
       else:
          artist_lst.append(result[1])
-   return artist_lst
+   for i in range(len(artist_lst)):
+        cur.execute("INSERT INTO artists (artistid, artistname) VALUES (?,?)",(i,artist_lst[i]))
+   conn.commit()
 
-   #loop over the len of the lsit 
+#cur, conn = createDatabase('artists')  
+#create_artist_table()
+ 
+
+# gets a list of artists only once 
+
+# def insert_artistsdata(data):
+#    artist_lst = []
+#    for result in data:
+#       if result[1] in artist_lst:
+#          continue
+#       else:
+#          artist_lst.append(result[1])
+#    for item in range(len(artist_lst)):
+#       artistid = artist_lst[index] 
+#       artistname = item
+
+
+   #loop over the len of the list 
    #index is the id and the item is the name 
    #set text as primary key 
    #TEXT PRIMARY KEY -- artist name 
    #Insert or Ignore into -- prevents duplicates 
 
    
-print(insert_artistsdata(get_links()))
-print(len(insert_artistsdata(get_links())))
+# print(insert_artistsdata(get_links()))
+# print(len(insert_artistsdata(get_links())))
 
  
  
@@ -87,4 +98,8 @@ print(len(insert_artistsdata(get_links())))
  
  
  
-# #get_links()
+#get_links()
+
+
+create_artist_table(get_links())
+
