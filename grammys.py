@@ -39,10 +39,11 @@ def createDatabase(db_name):
    return cur, conn
  
 #create table for artist and artistid
-def create_artist_table():
+def create_artist_table(artists_lst):
    cur, conn = createDatabase('artists.db')
-   cur.execute("DROP TABLE IF EXISTS artists")
    cur.execute("CREATE TABLE IF NOT EXISTS artists (artistid INTEGER UNIQUE PRIMARY KEY, artistname STRING)")
+
+   cur.execute("INSERT OR IGNOR INTO artists")
    conn.commit()
 
 #cur, conn = createDatabase('artists')  
@@ -50,6 +51,7 @@ create_artist_table()
  
  
 #gets a list of artists only once 
+
 def insert_artistsdata(data):
    artist_lst = []
    for result in data:
@@ -58,6 +60,13 @@ def insert_artistsdata(data):
       else:
          artist_lst.append(result[1])
    return artist_lst
+
+   #loop over the len of the lsit 
+   #index is the id and the item is the name 
+   #set text as primary key 
+   #TEXT PRIMARY KEY -- artist name 
+   #Insert or Ignore into -- prevents duplicates 
+
    
 print(insert_artistsdata(get_links()))
 print(len(insert_artistsdata(get_links())))
