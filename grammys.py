@@ -46,13 +46,17 @@ def create_artist_table(data):
    
    artist_lst = []
    for result in data:
-      if result[1] in artist_lst:
+      if result in artist_lst:
+         print(result)
          continue
       else:
          artist_lst.append(result[1])
+      print(artist_lst)
    for i in range(len(artist_lst)):
-        cur.execute("INSERT INTO artists (artistid, artistname) VALUES (?,?)",(i,artist_lst[i]))
-   conn.commit()
+      print(i)
+      print(artist_lst[i])
+      cur.execute("INSERT INTO artists (artistid, artistname) VALUES (?,?)",(i,artist_lst[i]))
+      conn.commit()
 
 #cur, conn = createDatabase('artists')  
 #create_artist_table()
